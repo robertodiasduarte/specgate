@@ -1,0 +1,49 @@
+# sdd.config.example.yaml — copy to sdd.config.yaml and fill in for your project.
+#
+# The framework's commands reference these slots ({{TEST_CMD}}, {{DEPLOY_CMD}}, …) instead of
+# hardcoding anything. That indirection is what makes the same commands work across stacks.
+#
+# Leave a slot empty when it does not apply to you. An empty slot means "skip this step",
+# never "guess" — the commands report skipped steps rather than inventing a command.
+
+project:
+  name: your-project
+  # Test command used by complementary checks and typical `kind: test` gates.
+  test_cmd: "npm test"
+  # Type/compile check used by `kind: typecheck` gates.
+  typecheck_cmd: "tsc --noEmit"
+  # Per-file-type syntax/lint check used by /release step 0a ({{LINT_CMD}}).
+  lint_cmd: "npx eslint"
+  # Branch you deploy from. Features are developed on branches off this one, never on it.
+  default_branch: "main"
+
+deploy:
+  # Runs in the deployment phase of /release, after the single human approval.
+  cmd: "./deploy.sh production"
+  # The remote/project identifier the deploy command targets ({{PROJECT_REF}}).
+  # Empty when your deploy command needs no target id.
+  project_ref: ""
+  # Optional. Detects things that reached production without a matching commit (a function
+  # pushed from a console, a migration applied through a dashboard). Empty = you deploy
+  # exclusively through git and this class of drift cannot occur.
+  drift_check_cmd: ""
+
+release:
+  # Project-specific release blockers. Ships with three generic rules; the real value comes
+  # from the rules you add after each incident. See docs/adaptation-guide.md.
+  landmines_cmd: "bash scripts/release-landmines.sh"
+  # Optional. Runs after a successful deployment (changelog entry, announcement, ledger sync).
+  changelog_hook: ""
+
+prompts:
+  # Optional. If your setup has a dedicated skill for authoring production LLM prompts, name it
+  # here; /design and /build route prompt work through it instead of writing prompts inline.
+  builder_skill: ""
+  # Optional. Same idea for iterative/agentic LLM processes (a spec for the loop itself).
+  loop_builder_skill: ""
+
+review:
+  # Optional. Command that requests an adversarial review from a DIFFERENT model vendor than the
+  # one writing the code — the value comes from an uncorrelated error profile. The answer format
+  # is contracted in .claude/sdd/templates/fragments/ADVISOR_CONSULT.md.
+  external_review_cmd: ""

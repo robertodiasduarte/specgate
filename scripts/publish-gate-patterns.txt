@@ -1,0 +1,34 @@
+# publish-gate-patterns.txt — generic forbidden patterns (public layer).
+#
+# These patterns catch classes of leak that apply to any project: personal data,
+# contact details, and references to an internal memory/knowledge layer that only
+# make sense inside a private repository.
+#
+# Project-specific literals (your database ref, your domain, your internal actors)
+# belong in a SEPARATE private file passed via PUBLISH_GATE_EXTRA_PATTERNS — never
+# here. A gate that ships its own blocklist publishes exactly what it set out to hide.
+#
+# Format: one ERE per line (grep -rInE -i). Blank lines and # comments ignored.
+# Anchor short or common words with \b: this gate is fail-closed, so a false positive
+# blocks publication.
+
+# --- Personal data ---------------------------------------------------------
+# Long digit runs: national ID numbers (e.g. 11-digit CPF), account numbers.
+[0-9]{11,}
+# E-mail addresses. ERE has no lookahead, so example.com/.org/.net cannot be excluded
+# in the pattern itself — docs must use those reserved domains and the gate whitelists
+# them by line content (see EXAMPLE_DOMAIN_RE in publish-gate.sh).
+[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}
+# International phone numbers written out.
+\+[0-9]{2}[ -]?\(?[0-9]{2}\)?[ -]?[0-9]{4,5}[ -]?[0-9]{4}
+
+# --- Internal knowledge-layer references -----------------------------------
+# Wiki-style links to private memory files.
+\[\[[a-z0-9_-]+\]\]
+# Memory filename conventions (feedback_*, reference_*, project_* markdown).
+\b(feedback|reference|project)_[a-z0-9_]+\.md\b
+
+# --- Local environment leakage ---------------------------------------------
+# Absolute home paths from the author's machine.
+/Users/[a-z]+/
+/home/[a-z]+/

@@ -1,0 +1,31 @@
+SpecGate
+Copyright (c) 2026 Roberto Dias Duarte
+
+This product includes software originally developed as part of AgentSpec:
+
+    AgentSpec
+    Copyright (c) 2026 Luan Moreno Maciel
+    https://github.com/luanmorenommaciel/agentspec
+    Licensed under the MIT License
+
+SpecGate began in April 2026 as a customization of AgentSpec 4.2 and has since
+diverged substantially. What descends from AgentSpec is the phase structure of
+the workflow — the progression from specification through design to build, and
+the practice of keeping phase artifacts as versioned documents in the
+repository.
+
+The following are additions developed independently and are not part of
+AgentSpec:
+
+  - The Verify Gate: acceptance as an executable command, with the six-state
+    exit contract (0/2/3/4/5/64) and its runner, scripts/verify-gate.sh
+  - The clarification protocol and its dedicated exit state
+  - The graded release verdict (PASS / CONCERNS / FAIL / WAIVED) and the
+    waiver taxonomy
+  - The adversarial review contract and the advisor ledger
+  - The EARS requirements grammar integration (the grammar itself is due to
+    Alistair Mavin, Rolls-Royce, 2009 — https://alistairmavin.com/ears/)
+
+AgentSpec remains actively maintained by its author as a separate project.
+SpecGate is not affiliated with, endorsed by, or a fork of it in the git sense:
+this repository was created clean-room, with no shared history.
